@@ -22,7 +22,7 @@ export class HslPixelGen {
   }
 
   public reset(palette?:string[]){
-    console.log("RESET")
+    console.log("RESET", palette)
     this.generator = this.generate();
     this.cur = this.generator.next();
     if(palette){
