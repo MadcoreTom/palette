@@ -4,3 +4,5 @@ Topics of interest include
 * Generator functions
 * Realtime rendering & React combined
 * Colour theory?
+
+GitHub should auto deploy it here: [https://madcoretom.github.io/palette/](https://madcoretom.github.io/palette/)

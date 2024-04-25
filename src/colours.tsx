@@ -10,6 +10,8 @@ export function Colours() {
     const [rawMode, setRawMode] = React.useState(false);
     const [colourText, setColourText] = React.useState(colours.join(", "));
     const [textValid, setTextValid] = React.useState(true);
+    const [pickerIndex, setPickerIndex] = React.useState(0);
+    const colourPicker = React.useRef(null);
 
     function updateColours(pal: string[]) {
         setColours(pal);
@@ -27,7 +29,7 @@ export function Colours() {
     }
 
     function changeColourText(text: string) {
-    if (!text.match(/^[a-fA-F0-9\s,]*$/)) {
+        if (!text.match(/^[a-fA-F0-9\s,#]*$/)) {
             setTextValid(false);
         } else {
             const parts = text.split(/[\s,#]+/).filter(t => t.length > 0);
@@ -46,10 +48,10 @@ export function Colours() {
         setColourText(text);
     }
 
-    function changeEditMode(toRaw:boolean){
-        if(toRaw){
+    function changeEditMode(toRaw: boolean) {
+        if (toRaw) {
             setColourText(colours.join(", ").toUpperCase());
-        } else if(textValid){
+        } else if (textValid) {
             const parts = colourText.split(/[\s,#]+/).filter(t => t.length > 0);
             const partsOfCorrectLength = parts.filter(p => p.length == 6)
             setColours(partsOfCorrectLength);
@@ -62,7 +64,10 @@ export function Colours() {
         onDelete={() => removeColour(i)}
         avatar={<Avatar style={{ backgroundColor: "#" + c }}>&nbsp;</Avatar>}
         label={c}
-        key={i} />)
+        key={i}
+        clickable
+        onClick={() => { const picker = colourPicker.current as HTMLInputElement | null; if (picker) { picker.value = "#" + c; picker.click(); setPickerIndex(i) } }}
+    />)
 
     const textEditor = <TextField
         id="outlined-multiline-static"
@@ -81,11 +86,36 @@ export function Colours() {
         <Chip variant="outlined" color="primary" icon={<AddIcon />} label="Add" clickable onClick={() => addColour()} />
     </Stack>
 
+    const setPickerVal = debounce(
+        () => {
+            const picker = colourPicker.current as HTMLInputElement | null;
+            if (picker) {
+                console.log(picker.value, picker.value.substring(1), pickerIndex)
+                colours[pickerIndex] = picker.value.substring(1);
+                console.log(">>",colours)
+                updateColours(colours);
+            }
+        }
+        , 300
+    );
+
 
     return <Box>
         <FormGroup>
             <FormControlLabel control={<Checkbox onChange={e => changeEditMode((e.target as HTMLInputElement).checked)} checked={rawMode} />} label="Raw editor" />
         </FormGroup>
         {rawMode ? textEditor : chipEditor}
+        <input type="color" id="color-picker" ref={colourPicker} style={{ display: "none" }} onChange={() => setPickerVal()} />
     </Box>
+}
+
+// I'm lazy, this came from Copilot
+function debounce(callback, delay) {
+    let timeoutId;
+    return function (...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            callback(...args);
+        }, delay);
+    };
 }

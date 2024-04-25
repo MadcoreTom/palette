@@ -9,7 +9,7 @@ function App() {
     const canvas = React.useRef(null);
     React.useEffect(() => {
       if(canvas.current){
-        const gen =  new HslPixelGen((canvas.current as HTMLCanvasElement).getContext("2d") as CanvasRenderingContext2D);
+         new HslPixelGen((canvas.current as HTMLCanvasElement).getContext("2d") as CanvasRenderingContext2D);
         // gen.tick();
       }
     });
