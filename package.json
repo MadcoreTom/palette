@@ -2,8 +2,8 @@
   "name": "colour",
   "version": "1.0.0",
   "scripts": {
-    "start": "esbuild src/app.tsx --bundle --servedir=./www/ --outdir=./www/js",
-    "build": "esbuild src/app.tsx --bundle --minify --outdir=./www/js"
+    "start": "esbuild src/app.tsx --bundle --servedir=./www/ --outdir=./www/js --loader:.glsl=text",
+    "build": "esbuild src/app.tsx --bundle --minify --outdir=./www/js  --loader:.glsl=text"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
