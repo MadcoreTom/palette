@@ -2,8 +2,8 @@ import * as React from "react";
 import { Avatar, Box, Checkbox, Chip, Container, FormControlLabel, FormGroup, Stack, TextField } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { COLOURS } from "./constants";
-import { GENERATOR } from "./generator";
 import { parsePalette } from "./colour-utils";
+import { GL_GENERATOR } from "./generator-gl";
 
 export function Colours() {
     const [colours, setColours] = React.useState(COLOURS);
@@ -15,9 +15,9 @@ export function Colours() {
 
     function updateColours(pal: string[]) {
         setColours(pal);
-        if (GENERATOR) {
-            GENERATOR.reset(pal);
-        }
+        // if (GENERATOR) {
+            GL_GENERATOR.reset(pal);
+        // }
     }
 
     function removeColour(idx: number) {
@@ -38,9 +38,9 @@ export function Colours() {
                 // const col = partsOfCorrectLength.map(parsePalette);
                 setColours(partsOfCorrectLength);
                 setTextValid(true);
-                if (GENERATOR) {
-                    GENERATOR.reset(partsOfCorrectLength);
-                }
+                // if (GENERATOR) {
+                    GL_GENERATOR.reset(partsOfCorrectLength);
+                // }
             } else {
                 setTextValid(false);
             }
@@ -96,7 +96,7 @@ export function Colours() {
                 updateColours(colours);
             }
         }
-        , 300
+        , 100
     );
 
 
