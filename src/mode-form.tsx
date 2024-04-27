@@ -10,12 +10,12 @@ export function ModeForm() {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={MODES[0]}
+                    value={MODES[0].option}
                     label="Mode"
                 // onChange={handleChange}
                 >
 
-                    {MODES.map(m => <MenuItem value={m} key={m.option}>{m.option}</MenuItem>)}
+                    {MODES.map(m => <MenuItem value={m.option} key={m.option}>{m.option}</MenuItem>)}
                 </Select>
             </FormControl>
         </Grid>

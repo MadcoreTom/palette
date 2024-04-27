@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Avatar, Box, Checkbox, Chip, Container, FormControlLabel, FormGroup, Stack, TextField } from "@mui/material";
+import { Avatar, Box, Checkbox, Chip, FormControlLabel, FormGroup, Stack, Switch, TextField } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import { COLOURS } from "./constants";
-import { parsePalette } from "./colour-utils";
 import { GL_GENERATOR } from "./generator-gl";
+import { Presets } from "./presets";
 
 export function Colours() {
     const [colours, setColours] = React.useState(COLOURS);
@@ -16,7 +16,7 @@ export function Colours() {
     function updateColours(pal: string[]) {
         setColours(pal);
         // if (GENERATOR) {
-            GL_GENERATOR.reset(pal);
+        GL_GENERATOR.reset(pal);
         // }
     }
 
@@ -39,7 +39,7 @@ export function Colours() {
                 setColours(partsOfCorrectLength);
                 setTextValid(true);
                 // if (GENERATOR) {
-                    GL_GENERATOR.reset(partsOfCorrectLength);
+                GL_GENERATOR.reset(partsOfCorrectLength);
                 // }
             } else {
                 setTextValid(false);
@@ -86,27 +86,30 @@ export function Colours() {
         <Chip variant="outlined" color="primary" icon={<AddIcon />} label="Add" clickable onClick={() => addColour()} />
     </Stack>
 
-    const setPickerVal = debounce(
-        () => {
+    const setPickerVal =/* debounce(
+     */   () => {
             const picker = colourPicker.current as HTMLInputElement | null;
             if (picker) {
                 console.log(picker.value, picker.value.substring(1), pickerIndex)
                 colours[pickerIndex] = picker.value.substring(1);
-                console.log(">>",colours)
+                console.log(">>", colours)
                 updateColours(colours);
             }
         }
-        , 100
-    );
+    //  , 100
+    //  );
 
 
-    return <Box>
-        <FormGroup>
-            <FormControlLabel control={<Checkbox onChange={e => changeEditMode((e.target as HTMLInputElement).checked)} checked={rawMode} />} label="Raw editor" />
-        </FormGroup>
+    return <Stack direction="column" spacing={2}>
+        <Stack spacing={2} direction="row">
+            <FormGroup>
+                <FormControlLabel control={<Switch onChange={e => changeEditMode((e.target as HTMLInputElement).checked)} checked={rawMode} />} label="Raw editor" />
+            </FormGroup>
+            <Presets setColours={col => updateColours(col)} />
+        </Stack>
         {rawMode ? textEditor : chipEditor}
         <input type="color" id="color-picker" ref={colourPicker} style={{ display: "none" }} onChange={() => setPickerVal()} />
-    </Box>
+    </Stack>
 }
 
 // I'm lazy, this came from Copilot

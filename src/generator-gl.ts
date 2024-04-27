@@ -13,6 +13,7 @@ export class GeneratorGl {
     private plane: WebGLBuffer;
     private shader: Shader | undefined;
     private initialised = false;
+    private colours:RGB[] = [[0,0,0]];
 
     private init() {
         const canvas = document.querySelector("canvas") as HTMLCanvasElement;
@@ -20,13 +21,13 @@ export class GeneratorGl {
         this.shader = createShader(this.gl, vert, fragHsl);
         this.plane = createPlaneMesh(this.gl);
     }
-    public render(colours: RGB[]) {
+    public render() {
         if (!this.initialised) {
             this.initialised = true;
             this.init();
         }
 
-        const { gl, shader, plane } = this;
+        const { gl, shader, plane, colours } = this;
 
         gl.clearColor(colours[0][0], colours[0][1], colours[0][2], 1);
         gl.clear(gl.DEPTH_BUFFER_BIT | gl.COLOR_BUFFER_BIT);
@@ -47,8 +48,8 @@ export class GeneratorGl {
     }
 
     public reset(colours: string[]) {
-        const rgb = colours.map(parsePalette).map(([r, g, b]) => [r / 255, g / 255, b / 255] as RGB);
-        this.render(rgb);
+        this.colours = colours.map(parsePalette).map(([r, g, b]) => [r / 255, g / 255, b / 255] as RGB);
+        this.render();
     }
 }
 
