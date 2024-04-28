@@ -14,6 +14,7 @@ export class GeneratorGl {
     private shader: Shader | undefined;
     private initialised = false;
     private colours:RGB[] = [[0,0,0]];
+    private saturation:number = 1;
 
     private init() {
         const canvas = document.querySelector("canvas") as HTMLCanvasElement;
@@ -40,15 +41,20 @@ export class GeneratorGl {
 
             colours.forEach(col => {
                 // todo set colour
-                shader.setColour([...col, 1])
+                shader.setColour([...col, this.saturation])
                 draw2dmesh(gl, plane, 6, shader);
                 console.log("M")
             })
         }
     }
 
-    public reset(colours: string[]) {
+    public updateColours(colours: string[]) {
         this.colours = colours.map(parsePalette).map(([r, g, b]) => [r / 255, g / 255, b / 255] as RGB);
+        this.render();
+    }
+
+    public updateSaturation(saturation: number) {
+        this.saturation = saturation;
         this.render();
     }
 }

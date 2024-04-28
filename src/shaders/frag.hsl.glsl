@@ -56,7 +56,8 @@ float distSq(vec3 a, vec3 b){
 void main(void)
 {   
     float hue = gl_FragCoord.x / 360.0;
+    float saturation = uCol.a;
     float lightness = 1.0 -gl_FragCoord.y / 100.0;
-    gl_FragDepth = distSq(uCol.rgb, hslToRgb(hue, 1.0, lightness));
+    gl_FragDepth = distSq(uCol.rgb, hslToRgb(hue, saturation, lightness));
     o_color = vec4(uCol.rgb,1.0);
 }

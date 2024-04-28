@@ -6,12 +6,9 @@ import { Colours } from "./colours";
 
 function App() {
     const canvas = React.useRef(null);
-    // React.useEffect(() => {
-
-    // });
 
     return <div>
-        <canvas width="360" height="100" style={{ width: "100%", border: "1px dotted blue" }} ref={canvas}></canvas>
+        <canvas width="360" height="100" style={{ width: "100%"}} ref={canvas}></canvas>
         <ModeForm />
         <Colours />
 

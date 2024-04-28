@@ -13,10 +13,15 @@ export function Colours() {
     const [pickerIndex, setPickerIndex] = React.useState(0);
     const colourPicker = React.useRef(null);
 
+    React.useEffect(() => {
+        GL_GENERATOR.updateColours(colours);
+
+    });
+
     function updateColours(pal: string[]) {
         setColours(pal);
         // if (GENERATOR) {
-        GL_GENERATOR.reset(pal);
+        GL_GENERATOR.updateColours(pal);
         // }
     }
 
@@ -39,7 +44,7 @@ export function Colours() {
                 setColours(partsOfCorrectLength);
                 setTextValid(true);
                 // if (GENERATOR) {
-                GL_GENERATOR.reset(partsOfCorrectLength);
+                GL_GENERATOR.updateColours(partsOfCorrectLength);
                 // }
             } else {
                 setTextValid(false);
@@ -81,19 +86,23 @@ export function Colours() {
         helperText={textValid ? undefined : "Invalid HEX colours"}
     />;
 
-    const chipEditor = <Stack direction="row" spacing={1} flexWrap="wrap">
+    const chipEditor = <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
         {chips}
         <Chip variant="outlined" color="primary" icon={<AddIcon />} label="Add" clickable onClick={() => addColour()} />
     </Stack>
+
+    const updatePickerValDebounced = debounce((c) => {
+        console.log("up")
+        updateColours([...c]);
+    }, 100)
 
     const setPickerVal =/* debounce(
      */   () => {
             const picker = colourPicker.current as HTMLInputElement | null;
             if (picker) {
-                console.log(picker.value, picker.value.substring(1), pickerIndex)
                 colours[pickerIndex] = picker.value.substring(1);
-                console.log(">>", colours)
-                updateColours(colours);
+                GL_GENERATOR.updateColours(colours);
+                updatePickerValDebounced(colours);
             }
         }
     //  , 100
